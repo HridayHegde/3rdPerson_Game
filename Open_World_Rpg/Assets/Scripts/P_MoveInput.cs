@@ -19,11 +19,16 @@ public class P_MoveInput : MonoBehaviour {
     public bool KeepCharGrounded;
 
 
+    #region ScriptRefs
+    public P_AttackInput PlayerAttackInput;
+    #endregion
 
 
 
-	// Use this for initialization
-	void Awake () {
+
+
+    // Use this for initialization
+    void Awake () {
         SetRefs();
 
     }
@@ -71,7 +76,7 @@ public class P_MoveInput : MonoBehaviour {
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDir), desiredRotSpeed);
         }
-        else if(blockRotPlayer == true)
+        else if(blockRotPlayer == true && !PlayerAttackInput.Attacking)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(forward), desiredRotSpeed);
         }
@@ -107,5 +112,6 @@ public class P_MoveInput : MonoBehaviour {
         Anim = GetComponent<Animator>();
         Cam = Camera.main;
         controller = GetComponent<CharacterController>();
+        PlayerAttackInput = GetComponent<P_AttackInput>();
     }
 }

@@ -7,20 +7,49 @@ public class P_WeaponEquip : MonoBehaviour {
     public Animator animator;
     public bool WeaponEquipped;
     public Weapon CurrentWeapon;
-    
+    public GameObject[] WeaponObjects;
+    public double Weapon_Dissolve_Control;
+    public Material WeaponMat = null;
     // Use this for initialization
-    void Start () {
+    void Start() {
         PlayerMove = GetComponent<P_MoveInput>();
+        foreach (GameObject x in WeaponObjects)
+        {
+
+            //WeaponMat.Add(x.GetComponent<Material>());
+            
+        }
         animator = PlayerMove.Anim;
         PlayerMove.blockRotPlayer = WeaponEquipped;
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         if (Input.GetKeyDown(KeyCode.E))
         {
             WeaponEquipped = !WeaponEquipped;
-            PlayerMove.blockRotPlayer = WeaponEquipped;
+            if(WeaponEquipped == true)
+            {
+                foreach(GameObject x in WeaponObjects)
+                {
+                    x.SetActive(true);
+                }
+                WeaponMat.SetFloat("_Dissolve", 1);
+                StartCoroutine(lerpshader(0));
+
+                
+            }
+            else
+            {
+                WeaponMat.SetFloat("_Dissolve", 0);
+                StartCoroutine(lerpshader(1));
+                foreach (GameObject x in WeaponObjects)
+                {
+                    x.SetActive(false);
+                }
+
+            }
+            
         }
         
 
@@ -40,4 +69,31 @@ public class P_WeaponEquip : MonoBehaviour {
         Axe,
         Sword
     };
+
+
+    IEnumerator lerpshader(int x)
+    {
+        if(x == 1)
+        {
+            double i = 0;
+            while (i <=1)
+            {
+                WeaponMat.SetFloat("_Dissolve", (float)i);
+                yield return new WaitForSeconds(0.05f);
+                i += 0.5;
+            }
+        }
+        else if(x == 0)
+        {
+            double i = 1;
+            while (i >= 0)
+            {
+                WeaponMat.SetFloat("_Dissolve", (float)i);
+                yield return new WaitForSeconds(0.05f);
+                i -= 0.1;
+            }
+
+
+        }
+    }
 }

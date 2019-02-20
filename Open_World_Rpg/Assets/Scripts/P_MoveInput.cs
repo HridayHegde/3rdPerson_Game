@@ -3,20 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class P_MoveInput : MonoBehaviour {
-    public float InputX,InputZ;
+    [Header("Movement")]
+    public float InputX;
+    public float InputZ;
     public Vector3 desiredMoveDir;
     public bool blockRotPlayer;
     public float desiredRotSpeed;
-    public Animator Anim;
     public float Speed;
     public float allowPlayerRot;
-    public Camera Cam;
-    public CharacterController controller;
+    public bool KeepCharGrounded;
     public bool isGrounded;
     private float verticalVel;
     private Vector3 moveVector;
 
-    public bool KeepCharGrounded;
+    [Header("References")]
+    public Animator Anim;
+    public Camera Cam;
+    public CharacterController controller;
+
+
+    [Header("Sprinting")]
+    public KeyCode Sprint_Key;
+    public bool Sprint;
+
+    private Vector3 rightFootPosition, leftFootPosition, leftFootIKPosition, rightFootIKPosition;
+    private Quaternion leftFootIKRot, rightFootIKRot;
+    private float lastpelvisPosY, lastRightFootPosY, lastLeftFootPosY;
+    [Header("Feet IK")]
+    public bool enableFeetIK = true;
+    [Range(0, 2)][SerializeField] private float heightFromGroundRaycast = 1.14f;
+    [Range(0, 2)] [SerializeField] private float raycastDownDist = 1.5f;
+    [SerializeField] private LayerMask environmentLayer;
+    [SerializeField] private float pelvisOffset = 0;
+    [Range(0, 1)] [SerializeField] private float pelvisUpAndDownSpeed = 0.28f;
+    [Range(0, 1)] [SerializeField] private float feetToIKPosSpeed = 0.5f;
+
+    public string leftFootAnimVariableName = "LeftFootCurve";
+    public string rightFootAnimVariableName = "RightFootCurve";
+
+    public bool useProIK = false;
+    public bool showSolverDebug = true;
 
 
     #region ScriptRefs
@@ -35,8 +61,24 @@ public class P_MoveInput : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        #region Sprinting
+        if (Input.GetKey(Sprint_Key))
+        {
+            Sprint = true;
+            SprintFunc();
+        }
+        else
+        {
+            Sprint = false;
+            Anim.SetBool("Sprint", false);
+        }
+        #endregion
+
+
+
         InputMagnitude();
 
+        #region Player Grounding
         //Ground the player
         if (KeepCharGrounded)
         {
@@ -53,6 +95,11 @@ public class P_MoveInput : MonoBehaviour {
             moveVector = new Vector3(0, verticalVel, 0);
             controller.Move(moveVector);
         }
+        #endregion
+
+        #region FeetIK
+
+        #endregion
     }
 
     void PlayerMoveAndRot()
@@ -113,5 +160,10 @@ public class P_MoveInput : MonoBehaviour {
         Cam = Camera.main;
         controller = GetComponent<CharacterController>();
         PlayerAttackInput = GetComponent<P_AttackInput>();
+    }
+
+    void SprintFunc()
+    {
+        Anim.SetBool("Sprint", true);
     }
 }

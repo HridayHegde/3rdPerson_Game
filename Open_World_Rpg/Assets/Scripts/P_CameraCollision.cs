@@ -9,6 +9,8 @@ public class P_CameraCollision : MonoBehaviour {
     Vector3 dollyDir;
     public Vector3 dollyDirAdjusted;
     public float distance;    
+
+    public GameObject tempgameobject;
 	// Use this for initialization
 	void Start () {
         dollyDir = transform.localPosition.normalized;
@@ -23,7 +25,11 @@ public class P_CameraCollision : MonoBehaviour {
         RaycastHit hit;
         if(Physics.Linecast(transform.parent.position, desiredCamPos, out hit))
         {
-            distance = Mathf.Clamp((hit.distance * 0.4f), minDist, maxDist);
+            tempgameobject = hit.transform.gameObject;
+            if (hit.transform.gameObject.tag != "Player")
+            {
+                distance = Mathf.Clamp((hit.distance * 0.4f), minDist, maxDist);
+            }
         }
         else {
             distance = maxDist;

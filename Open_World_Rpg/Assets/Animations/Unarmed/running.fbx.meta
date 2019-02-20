@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: a12ffb838003b86499cb0e7d616be31c
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: mixamorig:Head
     100002: mixamorig:HeadTop_End
@@ -182,7 +182,7 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
@@ -220,6 +220,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1022,7 +1024,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
